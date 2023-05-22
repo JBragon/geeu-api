@@ -11,7 +11,9 @@ namespace Models.Business
         public DateTime EndDate { get; set; }
 
         public virtual ICollection<Report> Reports { get; set; }
-        public virtual ICollection<Course_ExtensionProject> Course_ExtensionProject { get; set; }
-        public virtual ICollection<ProjectStatusLog> ProjectStatusLog { get; set; }
+        public virtual ICollection<Course_ExtensionProject> Course_ExtensionProjects { get; set; }
+        public virtual ICollection<Teacher_ExtensionProject> Teacher_ExtensionProjects { get; set; }
+        public virtual ICollection<Student_ExtensionProject> Student_ExtensionProjects { get; set; }
+        public virtual ICollection<ProjectStatusLog> ProjectStatusLogs { get; set; }
     }
 }

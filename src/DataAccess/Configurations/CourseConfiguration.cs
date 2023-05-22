@@ -22,9 +22,11 @@ namespace DataAccess.Configurations
             builder.Ignore(t => t.CreatedAt);
             builder.Ignore(t => t.UpdatedAt);
 
-            builder.HasMany(t => t.Course_ExtensionProject)
+            builder.HasMany(t => t.Course_ExtensionProjects)
                 .WithOne(t => t.Course);
 
+            builder.HasMany(t => t.Course_Users)
+                .WithOne(t => t.Course);
         }
     }
 }

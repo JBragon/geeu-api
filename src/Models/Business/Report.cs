@@ -10,5 +10,6 @@ namespace Models.Business
         public string Description { get; set; }
 
         public virtual ExtensionProject ExtensionProject { get; set; }
+        public virtual User User { get; set; }
     }
 }

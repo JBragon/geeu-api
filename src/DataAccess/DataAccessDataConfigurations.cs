@@ -15,10 +15,14 @@ namespace DataAccess
             var config = new HashSet<dynamic>()
             {
                 new Course_ExtensionProjectConfiguration(),
+                new Course_UserConfiguration(),
                 new CourseConfiguration(),
                 new ExtensionProjectConfiguration(),
                 new ProjectStatusLogConfiguration(),
                 new ReportConfiguration(),
+                new Student_ExtensionProjectConfiguration(),
+                new Teacher_ExtensionProjectConfiguration(),
+                new UserConfiguration(),
             };
 
             return config;

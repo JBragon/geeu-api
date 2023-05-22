@@ -6,6 +6,7 @@ namespace Models.Business
     {
         public string Name { get; set; }
 
-        public virtual ICollection<Course_ExtensionProject> Course_ExtensionProject { get; set; }
+        public virtual ICollection<Course_ExtensionProject> Course_ExtensionProjects { get; set; }
+        public virtual ICollection<Course_User> Course_Users { get; set; }
     }
 }

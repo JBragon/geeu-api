@@ -38,11 +38,21 @@ namespace DataAccess.Configurations
                 .HasColumnName("UpdatedAt")
                 .IsRequired();
 
-            builder.HasMany(t => t.Course_ExtensionProject)
-                .WithOne(t => t.ExtensionProject);
+            builder.HasMany(t => t.Course_ExtensionProjects)
+                .WithOne(t => t.ExtensionProject)
+                .HasForeignKey(t => t.ExtensionProjectId);
 
-            builder.HasMany(t => t.ProjectStatusLog)
-                .WithOne(t => t.ExtensionProject);
+            builder.HasMany(t => t.ProjectStatusLogs)
+                .WithOne(t => t.ExtensionProject)
+                .HasForeignKey(t => t.ExtensionProjectId);
+
+            builder.HasMany(t => t.Teacher_ExtensionProjects)
+                .WithOne(t => t.ExtensionProject)
+                .HasForeignKey(t => t.ExtensionProjectId);
+
+            builder.HasMany(t => t.Student_ExtensionProjects)
+                .WithOne(t => t.ExtensionProject)
+                .HasForeignKey(t => t.ExtensionProjectId);
         }
     }
 }

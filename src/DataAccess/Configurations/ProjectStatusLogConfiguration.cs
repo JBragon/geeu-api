@@ -29,7 +29,7 @@ namespace DataAccess.Configurations
             builder.Ignore(t => t.UpdatedAt);
 
             builder.HasOne(t => t.ExtensionProject)
-                .WithMany(t => t.ProjectStatusLog)
+                .WithMany(t => t.ProjectStatusLogs)
                 .HasForeignKey(t => t.ExtensionProjectId);
 
         }

@@ -8,6 +8,6 @@
         PermanentDisapproved = 3,
         Running = 4,
         Paused = 5,
-        concluded = 6
+        Concluded = 6
     }
 }

@@ -37,6 +37,9 @@ namespace DataAccess.Configurations
                 .WithMany(t => t.Reports)
                 .HasForeignKey(t => t.ExtensionProjectId);
 
+            builder.HasOne(t => t.User)
+                .WithMany(t => t.Reports)
+                .HasForeignKey(t => t.UserId);
         }
     }
 }
