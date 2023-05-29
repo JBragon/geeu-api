@@ -9,28 +9,34 @@ namespace WebApi.Configurations
     {
         public AutoMapperConfig()
         {
-            CreateMap<ProductResponse, Product>()
-                .ForMember(c => c.CreatedAt, opt => opt.Ignore())
-                .ForMember(c => c.UpdatedAt, opt => opt.Ignore())
-                .ForMember(c => c.EngelsCurves, opt => opt.Ignore())
-                .ReverseMap()
-                .ForMember(d => d.EngelsCurvesResponse, opt => opt.MapFrom(s => s.EngelsCurves));
-
-            CreateMap<EngelsCurveResponse, EngelsCurve>()
-                .ForMember(c => c.CreatedAt, opt => opt.Ignore())
-                .ForMember(c => c.UpdatedAt, opt => opt.Ignore())
-                .ForMember(c => c.Product, opt => opt.Ignore())
-                .ForMember(c => c.ProductId, opt => opt.Ignore())
-                .ReverseMap();
-
-            CreateMap<ProductPost, Product>()
+            CreateMap<CoursePost, Course>()
                 .ForMember(c => c.Id, opt => opt.Ignore())
                 .ForMember(c => c.CreatedAt, opt => opt.Ignore())
                 .ForMember(c => c.UpdatedAt, opt => opt.Ignore())
-                .ForMember(c => c.EngelsCurves, opt => opt.Ignore())
-                .ForMember(c => c.Observation, opt => opt.Ignore())
-                .ReverseMap()
-                .ForMember(d => d.EngelsCurvesPost, opt => opt.MapFrom(s => s.EngelsCurves));
+                .ForMember(c => c.Course_Users, opt => opt.Ignore())
+                .ForMember(c => c.Course_ExtensionProjects, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<CourseResponse, Course>()
+                .ForMember(c => c.CreatedAt, opt => opt.Ignore())
+                .ForMember(c => c.UpdatedAt, opt => opt.Ignore())
+                .ForMember(c => c.Course_Users, opt => opt.Ignore())
+                .ForMember(c => c.Course_ExtensionProjects, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<ExtensionProjectPost, ExtensionProject>()
+                .ForMember(c => c.Id, opt => opt.Ignore())
+                .ForMember(c => c.CreatedAt, opt => opt.Ignore())
+                .ForMember(c => c.UpdatedAt, opt => opt.Ignore())
+                .ForMember(c => c.Reports, opt => opt.Ignore())
+                .ForMember(c => c.Course_ExtensionProjects, opt => opt.Ignore())
+                .ForMember(c => c.Teacher_ExtensionProjects, opt => opt.Ignore())
+                .ForMember(c => c.Student_ExtensionProjects, opt => opt.Ignore())
+                .ForMember(c => c.ProjectStatusLogs, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<ExtensionProjectResponse, ExtensionProject>()
+                .ReverseMap();
         }
     }
 

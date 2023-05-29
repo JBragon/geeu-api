@@ -10,11 +10,12 @@ namespace WebApi.Configurations
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             //Services
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IEngelsCurveService, EngelsCurveService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IExtensionProjectService, ExtensionProjectService>();
 
             //Fluent Validation
-            services.AddTransient<IValidator<ProductPost>,  ProductPostValidation>();
+            services.AddTransient<IValidator<CoursePost>, CoursePostValidation>();
+            services.AddTransient<IValidator<ExtensionProjectPost>, ExtensionProjectPostValidation>();
 
             return services;
         }
