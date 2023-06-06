@@ -8,25 +8,18 @@ namespace DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            // Table & Column Mappings
-            builder.ToTable("User");
 
-            // Primary Key
-            builder.HasKey(t => t.Id);
-            
             builder.Property(t => t.Registration)
                 .HasColumnName("Registration")
                 .HasMaxLength(11)
                 .IsRequired();
 
-            builder.Property(t => t.Name)
-                .HasColumnName("Name")
-                .HasMaxLength(50)
+            builder.Property(t => t.CreatedAt)
+                .HasColumnName("CreatedAt")
                 .IsRequired();
 
-            builder.Property(t => t.Email)
-                .HasColumnName("Email")
-                .HasMaxLength(50)
+            builder.Property(t => t.UpdatedAt)
+                .HasColumnName("UpdatedAt")
                 .IsRequired();
 
             builder.HasMany(t => t.Teacher_ExtensionProjects)

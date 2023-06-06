@@ -1,6 +1,7 @@
 ﻿using Business.Interface;
 using Business.Services;
 using FluentValidation;
+using IdentityServer4.Stores;
 using Models.Mapper.Request;
 
 namespace WebApi.Configurations
@@ -12,6 +13,8 @@ namespace WebApi.Configurations
             //Services
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IExtensionProjectService, ExtensionProjectService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<IClientStore, ClientStoreImplementation>();
 
             //Fluent Validation
             services.AddTransient<IValidator<CoursePost>, CoursePostValidation>();

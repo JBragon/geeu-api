@@ -9,6 +9,9 @@ using DataAccess.Context;
 using WebApi.Configurations;
 using FluentValidation.AspNetCore;
 using MySql.EntityFrameworkCore.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Models.Business;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,9 +30,19 @@ builder.Services.Configure<HostBuilder>(host =>
     });
 });
 
-builder.Services.AddEntityFrameworkMySQL().AddDbContext<DBContext>(options => {
-    options.UseMySQL(builder.Configuration.GetConnectionString("DBConnectionString"));
+builder.Services.AddDbContext<DBContext>(options =>
+{
+    options.UseMySQL(builder.Configuration.GetConnectionString("DBConnectionString")!);
 }).AddUnitOfWork<DBContext>();
+
+builder.Services.AddIdentity<User, ApplicationRole>()
+        .AddEntityFrameworkStores<DBContext>()
+        .AddDefaultTokenProviders();
+
+builder.Services.AddIdentityServer()
+             .AddDeveloperSigningCredential()
+             .AddInMemoryApiResources(IdentityConfig.GetApiResources())
+             .AddInMemoryClients(IdentityConfig.GetClients());
 
 builder.Services.AddInfrastructure();
 builder.Services.RegisterMapper();
@@ -41,10 +54,22 @@ builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
            .AllowAnyHeader();
 }));
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "https://localhost:5001";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false
+        };
+    });
+
 // Add services to the container.
 builder.Services.AddControllers()
             .AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
 
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
@@ -83,8 +108,10 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.UseIdentityServer();
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 

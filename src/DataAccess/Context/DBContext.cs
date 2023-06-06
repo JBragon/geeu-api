@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Models.Business;
 
 namespace DataAccess.Context
 {
-    public class DBContext : DbContext
+    public class DBContext : IdentityDbContext<User, ApplicationRole, int>
     {
         public DBContext(DbContextOptions<DBContext> options)
            : base(options)

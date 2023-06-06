@@ -2,7 +2,6 @@
 using AutoMapper;
 using Business.Interface;
 using DataAccess.Context;
-using Microsoft.EntityFrameworkCore;
 using Models.Business;
 using Models.Enums;
 using Models.Filters;

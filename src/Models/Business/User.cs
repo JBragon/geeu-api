@@ -1,12 +1,12 @@
-﻿using Models.Infrastructure;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Models.Business
 {
-    public class User : BaseEntity<int>
+    public class User : IdentityUser<int>
     {
         public string Registration { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public virtual ICollection<Teacher_ExtensionProject> Teacher_ExtensionProjects { get; set; }
         public virtual ICollection<Student_ExtensionProject> Student_ExtensionProjects { get; set; }
