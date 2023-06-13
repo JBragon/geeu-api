@@ -6,7 +6,6 @@ using Models.Business;
 using Models.Enums;
 using Models.Filters;
 using Models.Infrastructure;
-using Models.Mapper.Response;
 
 namespace Business.Services
 {
