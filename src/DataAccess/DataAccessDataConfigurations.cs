@@ -18,7 +18,7 @@ namespace DataAccess
                 new Course_UserConfiguration(),
                 new CourseConfiguration(),
                 new ExtensionProjectConfiguration(),
-                new ProjectStatusLogConfiguration(),
+                new ExtensionProjectStatusLogConfiguration(),
                 new ReportConfiguration(),
                 new Student_ExtensionProjectConfiguration(),
                 new Teacher_ExtensionProjectConfiguration(),

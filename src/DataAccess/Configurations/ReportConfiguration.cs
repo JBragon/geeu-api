@@ -31,7 +31,13 @@ namespace DataAccess.Configurations
                 .HasColumnName("CreatedAt")
                 .IsRequired();
 
+            builder.Property(t => t.CreatedBy)
+                .HasColumnName("CreatedBy")
+                .HasMaxLength(256)
+                .IsRequired();
+
             builder.Ignore(t => t.UpdatedAt);
+            builder.Ignore(t => t.UpdatedBy);
 
             builder.HasOne(t => t.ExtensionProject)
                 .WithMany(t => t.Reports)

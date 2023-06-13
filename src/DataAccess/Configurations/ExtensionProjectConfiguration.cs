@@ -19,12 +19,19 @@ namespace DataAccess.Configurations
                 .HasMaxLength(150)
                 .IsRequired();
 
+            builder.HasIndex(t => t.Name).IsUnique();
+
             builder.Property(t => t.Status)
                 .HasColumnName("Status")
                 .IsRequired();
 
             builder.Property(t => t.StartDate)
                 .HasColumnName("StartDate")
+                .IsRequired();
+
+            builder.Property(t => t.Description)
+                .HasColumnName("Description")
+                .HasMaxLength(500)
                 .IsRequired();
 
             builder.Property(t => t.EndDate)
@@ -38,11 +45,21 @@ namespace DataAccess.Configurations
                 .HasColumnName("UpdatedAt")
                 .IsRequired();
 
+            builder.Property(t => t.CreatedBy)
+                .HasColumnName("CreatedBy")
+                .HasMaxLength(256)
+                .IsRequired();
+
+            builder.Property(t => t.UpdatedBy)
+                .HasColumnName("UpdatedBy")
+                .HasMaxLength(256)
+                .IsRequired();
+
             builder.HasMany(t => t.Course_ExtensionProjects)
                 .WithOne(t => t.ExtensionProject)
                 .HasForeignKey(t => t.ExtensionProjectId);
 
-            builder.HasMany(t => t.ProjectStatusLogs)
+            builder.HasMany(t => t.ExtensionProjectStatusLogs)
                 .WithOne(t => t.ExtensionProject)
                 .HasForeignKey(t => t.ExtensionProjectId);
 

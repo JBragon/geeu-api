@@ -19,8 +19,12 @@ namespace DataAccess.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
 
+            builder.HasIndex(t => t.Name).IsUnique();
+
             builder.Ignore(t => t.CreatedAt);
             builder.Ignore(t => t.UpdatedAt);
+            builder.Ignore(t => t.CreatedBy);
+            builder.Ignore(t => t.UpdatedBy);
 
             builder.HasMany(t => t.Course_ExtensionProjects)
                 .WithOne(t => t.Course);

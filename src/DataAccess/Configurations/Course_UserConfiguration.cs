@@ -17,6 +17,8 @@ namespace DataAccess.Configurations
             builder.Ignore(t => t.Id);
             builder.Ignore(t => t.CreatedAt);
             builder.Ignore(t => t.UpdatedAt);
+            builder.Ignore(t => t.CreatedBy);
+            builder.Ignore(t => t.UpdatedBy);
 
             builder.HasOne(t => t.User)
                 .WithMany(t => t.Course_Users)

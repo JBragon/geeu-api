@@ -3,6 +3,7 @@ using System;
 using DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20230613001212_FixNameTable")]
+    partial class FixNameTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,6 +279,10 @@ namespace DataAccess.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Status");
 
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ExtensionProjectId");
@@ -534,7 +541,7 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Models.Business.ExtensionProjectStatusLog", b =>
                 {
                     b.HasOne("Models.Business.ExtensionProject", "ExtensionProject")
-                        .WithMany("ExtensionProjectStatusLogs")
+                        .WithMany("ProjectStatusLogs")
                         .HasForeignKey("ExtensionProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -610,7 +617,7 @@ namespace DataAccess.Migrations
                 {
                     b.Navigation("Course_ExtensionProjects");
 
-                    b.Navigation("ExtensionProjectStatusLogs");
+                    b.Navigation("ProjectStatusLogs");
 
                     b.Navigation("Reports");
 

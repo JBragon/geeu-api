@@ -14,6 +14,9 @@ namespace WebApi.Configurations
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IExtensionProjectService, ExtensionProjectService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IExtensionProjectStatusLogService, ExtensionProjectStatusLogService>();
+
             services.AddTransient<IClientStore, ClientStoreImplementation>();
 
             //Fluent Validation

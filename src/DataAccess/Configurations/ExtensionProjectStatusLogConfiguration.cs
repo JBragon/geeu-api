@@ -4,12 +4,12 @@ using Models.Business;
 
 namespace DataAccess.Configurations
 {
-    internal class ProjectStatusLogConfiguration : IEntityTypeConfiguration<ProjectStatusLog>
+    internal class ExtensionProjectStatusLogConfiguration : IEntityTypeConfiguration<ExtensionProjectStatusLog>
     {
-        public void Configure(EntityTypeBuilder<ProjectStatusLog> builder)
+        public void Configure(EntityTypeBuilder<ExtensionProjectStatusLog> builder)
         {
             // Table & Column Mappings
-            builder.ToTable("ProjectStatusLog");
+            builder.ToTable("ExtensionProjectStatusLog");
 
             // Primary Key
             builder.HasKey(t => t.Id);
@@ -26,10 +26,15 @@ namespace DataAccess.Configurations
                 .HasColumnName("CreatedAt")
                 .IsRequired();
 
+            builder.Property(t => t.CreatedBy)
+                .HasColumnName("CreatedBy")
+                .IsRequired();
+
             builder.Ignore(t => t.UpdatedAt);
+            builder.Ignore(t => t.UpdatedBy);
 
             builder.HasOne(t => t.ExtensionProject)
-                .WithMany(t => t.ProjectStatusLogs)
+                .WithMany(t => t.ExtensionProjectStatusLogs)
                 .HasForeignKey(t => t.ExtensionProjectId);
 
         }

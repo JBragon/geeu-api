@@ -32,7 +32,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] CoursePost coursePost)
         {
-            return ExecuteCreate(() => _courseService.Create<CourseResponse>(coursePost));
+            return ExecuteCreate(() => _courseService.Create<CourseResponse>(coursePost, ""));
         }
     }
 }

@@ -36,12 +36,14 @@ namespace Business.Services
 
         #endregion
 
-        public virtual TOutputModel Create<TOutputModel>(object inputModel)
+        public virtual TOutputModel Create<TOutputModel>(object inputModel, string userName)
         {
             var entity = _mapper.Map<TEntity>(inputModel);
 
-            entity.CreatedAt = DateTime.Now;
-            entity.UpdatedAt = DateTime.Now;
+            entity.CreatedAt = DateTime.UtcNow;
+            entity.UpdatedAt = DateTime.UtcNow;
+            entity.CreatedBy = userName;
+            entity.UpdatedBy = userName;
 
             Repository.Insert(entity);
             _unitOfWork.SaveChanges();
@@ -56,11 +58,12 @@ namespace Business.Services
             return outputModel;
         }
 
-        public virtual TOutputModel Update<TOutputModel>(object entity)
+        public virtual TOutputModel Update<TOutputModel>(object entity, string userName)
         {
             var item = _mapper.Map<TEntity>(entity);
 
-            item.UpdatedAt = DateTime.Now;
+            item.UpdatedAt = DateTime.UtcNow;
+            item.UpdatedBy = userName;
 
             Repository.Update(item);
             _unitOfWork.SaveChanges();

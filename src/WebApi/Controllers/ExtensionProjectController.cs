@@ -32,13 +32,13 @@ namespace WebApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] ExtensionProjectPost extensionProjectPost)
         {
-            return ExecuteCreate(() => _extensionProjectService.Create<ExtensionProjectResponse>(extensionProjectPost));
+            return ExecuteCreate(() => _extensionProjectService.Create<ExtensionProjectResponse>(extensionProjectPost, ""));
         }
 
         [HttpPut]
         public IActionResult Put([FromBody] ExtensionProjectPut extensionProjectPut)
         {
-            return ExecuteCreate(() => _extensionProjectService.Update<ExtensionProjectResponse>(extensionProjectPut));
+            return ExecuteCreate(() => _extensionProjectService.Update<ExtensionProjectResponse>(extensionProjectPut, ""));
         }
 
         [HttpDelete("{id}")]

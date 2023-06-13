@@ -6,13 +6,19 @@ using Models.Business;
 using Models.Enums;
 using Models.Filters;
 using Models.Infrastructure;
+using Models.Mapper.Response;
 
 namespace Business.Services
 {
     public class ExtensionProjectService : BaseService<ExtensionProject, int>, IExtensionProjectService
     {
-        public ExtensionProjectService(IUnitOfWork<DBContext> unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+
+        private readonly IExtensionProjectStatusLogService _extensionProjectStatusLogService;
+        public ExtensionProjectService(
+            IUnitOfWork<DBContext> unitOfWork, 
+            IMapper mapper, IExtensionProjectStatusLogService extensionProjectStatusLogService) : base(unitOfWork, mapper)
         {
+            _extensionProjectStatusLogService = extensionProjectStatusLogService;
         }
 
         public SearchResponse<TOutputModel> Search<TOutputModel>(ExtensionProjectFilter filter)
@@ -28,14 +34,30 @@ namespace Business.Services
             return response;
         }
 
-        public override TOutputModel Update<TOutputModel>(object entity)
+        public override TOutputModel Create<TOutputModel>(object entity, string userName)
+        {
+            var item = _mapper.Map<ExtensionProject>(entity);
+
+            item.Status = ExtensionProjectStatus.PendingApproval;
+            item.ExtensionProjectStatusLogs = new List<ExtensionProjectStatusLog>();
+            item.ExtensionProjectStatusLogs.Add(new ExtensionProjectStatusLog
+            {
+                Status = ExtensionProjectStatus.PendingApproval,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = userName
+            });
+
+            return base.Create<TOutputModel>(item, userName);
+        }
+
+        public override TOutputModel Update<TOutputModel>(object entity, string userName)
         {
             var item = _mapper.Map<ExtensionProject>(entity);
 
             if (GetById<ExtensionProject>(item.Id).Status == ExtensionProjectStatus.Concluded)
                 throw new Exception("Projeto concluído, não pode ser atualizado!");
 
-            return base.Update<TOutputModel>(entity);
+            return base.Update<TOutputModel>(entity, userName);
 
         }
 
