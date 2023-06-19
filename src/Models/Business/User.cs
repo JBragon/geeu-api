@@ -12,5 +12,6 @@ namespace Models.Business
         public virtual ICollection<Student_ExtensionProject> Student_ExtensionProjects { get; set; }
         public virtual ICollection<Course_User> Course_Users { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
+        public virtual ICollection<ExtensionProject> ExtensionProjectResponsible { get; set; }
     }
 }

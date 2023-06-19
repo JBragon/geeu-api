@@ -11,6 +11,7 @@ namespace Models.Filters
         public ExtensionProjectStatus Status { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public List<int> ListCourseId { get; set; }
 
         private Expression<Func<ExtensionProject, bool>> filter = PredicateBuilder.New<ExtensionProject>(true);
         private Func<IQueryable<ExtensionProject>, IOrderedQueryable<ExtensionProject>> order;
@@ -23,18 +24,23 @@ namespace Models.Filters
             if (Status != null)
                 filter = filter.And(x => x.Status == Status);
 
-            if (StartDate != null && EndDate == null)
+            if (StartDate != DateTime.MinValue && EndDate == DateTime.MinValue)
             {
                 filter = filter.And(x => x.StartDate == StartDate);
             }
-            else if (StartDate == null && EndDate != null)
+            else if (StartDate == DateTime.MinValue && EndDate != DateTime.MinValue)
             {
                 filter = filter.And(x => x.EndDate == EndDate);
             }
-            else
+            else if (StartDate != DateTime.MinValue && EndDate != DateTime.MinValue)
             {
                 filter = filter.And(x => x.StartDate >= StartDate
                                         && x.EndDate <= EndDate);
+            }
+
+            if (ListCourseId.Any())
+            {
+                filter = filter.And(x => x.Course_ExtensionProjects.Any(c => ListCourseId.Contains(c.CourseId)));
             }
 
             return filter;

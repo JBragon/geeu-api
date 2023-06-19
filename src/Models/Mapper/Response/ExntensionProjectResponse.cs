@@ -6,6 +6,7 @@ namespace Models.Mapper.Response
     public class ExtensionProjectResponse
     {
         public int Id { get; set; }
+        public int ResponsibleUserId { get; set; }
         public string Name { get; set; }
         public ExtensionProjectStatus Status { get; set; }
         public DateTime StartDate { get; set; }
@@ -15,6 +16,8 @@ namespace Models.Mapper.Response
         public DateTime UpdatedAt { get; set; }
         public string UpdatedBy { get; set; }
         public string Description { get; set; }
+
+        public virtual User ResponsibleUser { get; set; }
 
         public virtual ICollection<Report> Reports { get; set; }
         public virtual ICollection<Course_ExtensionProject> Course_ExtensionProjects { get; set; }

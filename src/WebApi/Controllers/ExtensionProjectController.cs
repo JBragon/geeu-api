@@ -29,6 +29,12 @@ namespace WebApi.Controllers
             return Execute(() => _extensionProjectService.GetById<ExtensionProjectResponse>(id), 200, true);
         }
 
+        [HttpGet("GetExtensionProjectPendingApproval")]
+        public IActionResult GetExtensionProjectPendingApproval([FromQuery] GetExtensionProjectPendingApproval request)
+        {
+            return Execute(() => _extensionProjectService.GetExtensionProjectPendingApproval<ExtensionProjectResponse>(request), 200, true);
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] ExtensionProjectPost extensionProjectPost)
         {

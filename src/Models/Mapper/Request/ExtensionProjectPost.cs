@@ -7,6 +7,7 @@ namespace Models.Mapper.Request
 {
     public class ExtensionProjectPost
     {
+        public int ResponsibleUserId { get; set; }
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -20,6 +21,10 @@ namespace Models.Mapper.Request
     {
         public ExtensionProjectPostValidation()
         {
+            RuleFor(v => v.ResponsibleUserId)
+              .NotEmpty()
+              .WithMessage(RuleMessage.Informed("ResponsibleUserId"));
+
             RuleFor(v => v.Name)
               .NotEmpty()
               .WithMessage(RuleMessage.Informed("Name"))

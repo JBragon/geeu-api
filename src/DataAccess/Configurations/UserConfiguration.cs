@@ -38,6 +38,10 @@ namespace DataAccess.Configurations
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId);
 
+            builder.HasMany(t => t.ExtensionProjectResponsible)
+                .WithOne(t => t.ResponsibleUser)
+                .HasForeignKey(t => t.ResponsibleUserId);
+
         }
     }
 }

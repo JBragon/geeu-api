@@ -2,8 +2,9 @@
 {
     public enum ParticipationStatus
     {
-        Participating = 0,
-        PendingDeductionOfHours = 1,
-        ReportedWorkload = 2
+        PendingApproval = 0,
+        Participating = 1,
+        PendingDeductionOfHours = 2,
+        ReportedWorkload = 3
     }
 }

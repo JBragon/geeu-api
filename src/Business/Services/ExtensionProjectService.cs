@@ -2,10 +2,12 @@
 using AutoMapper;
 using Business.Interface;
 using DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 using Models.Business;
 using Models.Enums;
 using Models.Filters;
 using Models.Infrastructure;
+using Models.Mapper.Request;
 
 namespace Business.Services
 {
@@ -14,7 +16,7 @@ namespace Business.Services
 
         private readonly IExtensionProjectStatusLogService _extensionProjectStatusLogService;
         public ExtensionProjectService(
-            IUnitOfWork<DBContext> unitOfWork, 
+            IUnitOfWork<DBContext> unitOfWork,
             IMapper mapper, IExtensionProjectStatusLogService extensionProjectStatusLogService) : base(unitOfWork, mapper)
         {
             _extensionProjectStatusLogService = extensionProjectStatusLogService;
@@ -24,7 +26,7 @@ namespace Business.Services
         {
             var response = base.Search<TOutputModel>(
                filter.GetFilter(),
-               include: null,
+               include: i => i.Include(v => v.ResponsibleUser),
                orderBy: null,
                filter.Page,
                filter.RowsPerPage
@@ -53,8 +55,10 @@ namespace Business.Services
         {
             var item = _mapper.Map<ExtensionProject>(entity);
 
-            if (GetById<ExtensionProject>(item.Id).Status == ExtensionProjectStatus.Concluded)
-                throw new Exception("Projeto concluído, não pode ser atualizado!");
+            var extensionProject = GetById<ExtensionProject>(item.Id);
+
+            if (extensionProject.Status == ExtensionProjectStatus.Concluded || extensionProject.Status == ExtensionProjectStatus.PermanentDisapproved)
+                throw new Exception("Projeto não pode ser atualizado!");
 
             return base.Update<TOutputModel>(entity, userName);
 
@@ -64,10 +68,22 @@ namespace Business.Services
         {
             ExtensionProject extensionProject = GetById<ExtensionProject>(id);
 
-            if(extensionProject.Status != ExtensionProjectStatus.PendingApproval)
+            if (extensionProject.Status != ExtensionProjectStatus.PendingApproval)
                 throw new Exception("Projeto não pode ser excluído!");
 
             base.Delete(id);
+        }
+
+        public SearchResponse<TOutputModel> GetExtensionProjectPendingApproval<TOutputModel>(GetExtensionProjectPendingApproval rows)
+        {
+            var filter = new ExtensionProjectFilter
+            {
+                Status = ExtensionProjectStatus.PendingApproval,
+                RowsPerPage = rows.RowsPerPage,
+                Page = rows.Page
+            };
+
+            return this.Search<TOutputModel>(filter);
         }
     }
 }

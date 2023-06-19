@@ -38,6 +38,7 @@ namespace WebApi.Configurations
                 .ForMember(c => c.Reports, opt => opt.Ignore())
                 .ForMember(c => c.Student_ExtensionProjects, opt => opt.Ignore())
                 .ForMember(c => c.ExtensionProjectStatusLogs, opt => opt.Ignore())
+                .ForMember(c => c.ResponsibleUser, opt => opt.Ignore())
                 .ReverseMap();
 
             CreateMap<ExtensionProjectResponse, ExtensionProject>()

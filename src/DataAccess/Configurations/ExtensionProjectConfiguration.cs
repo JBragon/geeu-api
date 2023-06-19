@@ -13,6 +13,10 @@ namespace DataAccess.Configurations
 
             // Primary Key
             builder.HasKey(t => t.Id);
+            
+            builder.Property(t => t.ResponsibleUserId)
+                .HasColumnName("ResponsibleUser")
+                .IsRequired();
 
             builder.Property(t => t.Name)
                 .HasColumnName("Name")
@@ -70,6 +74,10 @@ namespace DataAccess.Configurations
             builder.HasMany(t => t.Student_ExtensionProjects)
                 .WithOne(t => t.ExtensionProject)
                 .HasForeignKey(t => t.ExtensionProjectId);
+
+            builder.HasOne(t => t.ResponsibleUser)
+                .WithMany(t => t.ExtensionProjectResponsible)
+                .HasForeignKey(t => t.ResponsibleUserId);
         }
     }
 }

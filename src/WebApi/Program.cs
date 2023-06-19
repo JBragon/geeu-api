@@ -8,7 +8,6 @@ using System.Text.Json.Serialization;
 using DataAccess.Context;
 using WebApi.Configurations;
 using FluentValidation.AspNetCore;
-using MySql.EntityFrameworkCore.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Models.Business;
 using Microsoft.IdentityModel.Tokens;
@@ -32,7 +31,7 @@ builder.Services.Configure<HostBuilder>(host =>
 
 builder.Services.AddDbContext<DBContext>(options =>
 {
-    options.UseMySQL(builder.Configuration.GetConnectionString("DBConnectionString")!);
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DBConnectionString")!);
 }).AddUnitOfWork<DBContext>();
 
 builder.Services.AddIdentity<User, ApplicationRole>()
@@ -68,8 +67,6 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.AddControllers()
             .AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
-
 
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
