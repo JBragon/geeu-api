@@ -2,6 +2,7 @@
 using AutoMapper;
 using Business.HttpInterfaces;
 using Business.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,7 @@ using Models.Mapper.Response;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 
 namespace Business.Services
@@ -22,15 +24,22 @@ namespace Business.Services
         protected readonly IMapper _mapper;
         private readonly IUFOPHttpService _ufopHttpService;
         private readonly IConfiguration _configuration;
-        private readonly ICourseService _courseService;
+        private readonly ICourseService _courseService; 
+        private readonly UserManager<User> _userManager;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IUFOPHttpService ufopHttpService, IConfiguration configuration, ICourseService courseService)
+        public UserService(IUnitOfWork unitOfWork, 
+                            IMapper mapper, 
+                            IUFOPHttpService ufopHttpService,
+                            IConfiguration configuration, 
+                            ICourseService courseService,
+                            UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _ufopHttpService = ufopHttpService;
             _configuration = configuration;
             _courseService = courseService;
+            _userManager = userManager;
         }
 
         #region Properties
@@ -88,18 +97,20 @@ namespace Business.Services
 
             var response = await _ufopHttpService.Login(request, tokenBasic);
 
-            User userRegistered = Repository.GetFirstOrDefault(predicate: v => v.Email.Equals(response.email));
+            User userIdentity = await _userManager.FindByEmailAsync(response.email);
 
-            if (userRegistered is null && response.primeironome is not null)
+            if (userIdentity is null)
             {
-                User user = new User
+                userIdentity = new User
                 {
                     UserName = response.primeironome,
                     NormalizedEmail = $"{response.primeironome} {response.ultimonome}",
-                    Email = response.email
+                    Email = response.email,
+                    NormalizedUserName = response.email,
+                    EmailConfirmed = true,
                 };
 
-                Create(user);
+                Create(userIdentity);
 
                 var course = _courseService.Search<Course>(new CourseFilter
                 {
@@ -108,33 +119,42 @@ namespace Business.Services
 
                 if (course.Items.Any())
                 {
-                    user.Course_Users = new List<Course_User>
+                    userIdentity.Course_Users = new List<Course_User>
                     {
                         new Course_User
                         {
                             CourseId = course.Items.FirstOrDefault().Id,
-                            UserId = user.Id
+                            UserId = userIdentity.Id
                         }
                     };
 
-                    Update(user);
+                    Update(userIdentity);
                 }
 
             }
 
-            var token = BuildToken(response);
+            var token = BuildToken(userIdentity);
 
-            return token;
+            return await token;
         }
 
-        private LoginResponse BuildToken(UFOPLoginResponse userInfo)
+        private async Task<LoginResponse> BuildToken(User userInfo)
         {
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.email),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            var roles = await _userManager.GetRolesAsync(userInfo);
+
+            //Carregando as permissões do usuário para ser incorporado ao token
+            foreach (string role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:key").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
