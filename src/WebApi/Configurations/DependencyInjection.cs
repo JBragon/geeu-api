@@ -22,6 +22,7 @@ namespace WebApi.Configurations
             //Fluent Validation
             services.AddTransient<IValidator<CoursePost>, CoursePostValidation>();
             services.AddTransient<IValidator<ExtensionProjectPost>, ExtensionProjectPostValidation>();
+            services.AddTransient<IValidator<LoginPost>, LoginPostValidation>();
 
             return services;
         }

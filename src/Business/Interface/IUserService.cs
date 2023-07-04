@@ -1,11 +1,14 @@
-﻿namespace Business.Interface
+﻿using Models.Business;
+using Models.Mapper.Request;
+using Models.Mapper.Response;
+
+namespace Business.Interface
 {
     public interface IUserService
     {
-        TOutputModel Create<TOutputModel>(object inputModel);
-
-        TOutputModel GetById<TOutputModel>(int Id);
-
-        TOutputModel Update<TOutputModel>(object entity);
+        User Create(User inputModel);
+        User GetById(int Id);
+        User Update(User entity);
+        Task<LoginResponse> Login(LoginPost request);
     }
 }

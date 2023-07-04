@@ -11,6 +11,10 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Models.Business;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Business.HttpInterfaces;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +47,17 @@ builder.Services.AddIdentityServer()
              .AddInMemoryApiResources(IdentityConfig.GetApiResources())
              .AddInMemoryClients(IdentityConfig.GetClients());
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+       options.TokenValidationParameters = new TokenValidationParameters
+       {
+           ValidateIssuer = false,
+           ValidateAudience = false,
+           ValidateLifetime = true,
+           ValidateIssuerSigningKey = true,
+           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JWT:key").Value!)),
+           ClockSkew = TimeSpan.Zero
+       });
+
 builder.Services.AddInfrastructure();
 builder.Services.RegisterMapper();
 
@@ -53,15 +68,15 @@ builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
            .AllowAnyHeader();
 }));
 
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.Authority = "https://localhost:5001";
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = false
-        };
-    });
+//builder.Services.AddAuthentication("Bearer")
+//    .AddJwtBearer("Bearer", options =>
+//    {
+//        options.Authority = "https://localhost:5001";
+//        options.TokenValidationParameters = new TokenValidationParameters
+//        {
+//            ValidateAudience = false
+//        };
+//    });
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -102,6 +117,11 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+builder
+    .Services
+        .AddRefitClient<IUFOPHttpService>()
+        .ConfigureHttpClient(c => c.BaseAddress = new Uri(builder.Configuration["HttpService:UFOPBaseURL"]));
 
 var app = builder.Build();
 
