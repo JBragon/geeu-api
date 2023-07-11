@@ -14,12 +14,11 @@ namespace Business.Services
     public class ExtensionProjectService : BaseService<ExtensionProject, int>, IExtensionProjectService
     {
 
-        private readonly IExtensionProjectStatusLogService _extensionProjectStatusLogService;
         public ExtensionProjectService(
             IUnitOfWork<DBContext> unitOfWork,
-            IMapper mapper, IExtensionProjectStatusLogService extensionProjectStatusLogService) : base(unitOfWork, mapper)
+            IMapper mapper) : base(unitOfWork, mapper)
         {
-            _extensionProjectStatusLogService = extensionProjectStatusLogService;
+
         }
 
         public SearchResponse<TOutputModel> Search<TOutputModel>(ExtensionProjectFilter filter)

@@ -38,7 +38,7 @@ namespace Models.Filters
                                         && x.EndDate <= EndDate);
             }
 
-            if (ListCourseId.Any())
+            if (ListCourseId is not null && ListCourseId.Any())
             {
                 filter = filter.And(x => x.Course_ExtensionProjects.Any(c => ListCourseId.Contains(c.CourseId)));
             }
